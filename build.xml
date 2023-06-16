@@ -1,0 +1,111 @@
+<project name="util" basedir="." default="compile">
+  <property name="home.dir"  value="." />
+  <property name="src.dir"   value="src" />
+  <property name="build.dir" value="out" />
+  <property name="lib.dir"   value="lib" />
+  <property name="test.dir"  value="tests" />
+  <property name="dist.dir"  value="${basedir}" />
+
+  <target name="clean">
+    <delete dir="${build.dir}"></delete>
+  </target>
+
+  <path id="classpath">
+    <pathelement location="${build.dir}" />
+    <!--
+    <fileset dir="${lib.dir}">
+      <include name="*.jar" />
+    </fileset>
+    -->
+  </path>
+
+  <path id="test.classpath">
+    <pathelement location="${build.dir}" />
+    <pathelement location="${test.dir}" />
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}" />
+    <javac debug="true" includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}">
+      <!-- <compilerarg value="-Xlint"/> -->
+      <classpath refid="classpath" />
+      <include name="**/*.java"/>
+    </javac>        
+  </target>
+  
+  <target name="test.compile">
+    <mkdir dir="${build.dir}" />
+    <javac debug="true" includeantruntime="false" destdir="${build.dir}">
+      <src path="${src.dir}"/>
+      <src path="${test.dir}"/>
+      <!-- <compilerarg value="-Xlint"/> -->
+      <classpath refid="test.classpath" />
+      <include name="**/*.java"/>
+    </javac>        
+  </target>
+
+  <target name="all" depends="clean,test.compile">
+    <java classname="tests.LoggerTest" fork="yes" classpathref="test.classpath"/>
+    <java classname="tests.DateTest"   fork="yes" classpathref="test.classpath"/>
+    <java classname="tests.FileTest"   fork="yes" classpathref="test.classpath"/>
+    <java classname="tests.ConfigTest" fork="yes" classpathref="test.classpath"/>
+  </target>
+
+  <target name="log" depends="clean,test.compile">
+    <java classname="tests.LoggerTest" fork="yes">
+      <classpath refid="test.classpath" />
+    </java>
+  </target>
+
+  <target name="date" depends="clean,test.compile">
+    <java classname="tests.DateTest" fork="yes">
+      <classpath refid="test.classpath" />
+    </java>
+  </target>
+
+  <target name="file" depends="clean,test.compile">
+    <java classname="tests.FileTest" fork="yes">
+      <classpath refid="test.classpath" />
+    </java>
+  </target>
+
+  <target name="config" depends="clean,test.compile">
+    <java classname="tests.ConfigTest" fork="yes">
+      <classpath refid="test.classpath" />
+    </java>
+  </target>
+
+  <target name="next" depends="clean,compile">
+    <java classname="org.joedog.ann.tests.Next" fork="yes">
+      <classpath refid="classpath" />
+    </java>
+  </target>
+
+  <target name="count" depends="clean,compile">
+    <java classname="org.joedog.ann.tests.Count" fork="yes">
+      <classpath refid="classpath" />
+    </java>
+  </target>
+
+
+  <target name="jar" depends="clean,compile">
+    <jar jarfile="${dist.dir}/${ant.project.name}-${version}.jar" basedir="${build.dir}">
+      <manifest>  
+        <attribute name="Built-By"           value="${user.name}" />  
+        <attribute name="Main-Class"         value="org.joedog.ann.Main" />  
+        <section name="common">  
+          <attribute name="Specification-Title" value="${component.name}" />  
+          <attribute name="Specification-Version" value="${component.version}" />  
+          <attribute name="Specification-Vendor" value="${component.vendor}" />  
+          <attribute name="Implementation-Title" value="${component.name}" />  
+          <attribute name="Implementation-Version" value="${component.version} ${TODAY}" />  
+          <attribute name="Implementation-Vendor" value="${component.vendor}" />  
+        </section>  
+        <attribute name="Class-Path" value="${libs.dir}" />  
+      </manifest>  
+    </jar> 
+  </target>
+
+  <target name="main" depends="clean" />
+
+</project>
