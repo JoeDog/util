@@ -19,5 +19,11 @@ public class FileTest {
     System.out.printf("Is %s gzipped?  %s\n", gzp, FileUtils.isGzipped(gzp));
     System.out.printf("Is %s gzipped? %s\n", zip, FileUtils.isGzipped(zip));
     System.out.printf("Is %s zipped?  %s\n", zip, FileUtils.isZipped(zip));
+    FileUtils.write("haha.txt", "This is a line.");
+    FileUtils.write("haha.txt", "This is another line.");
+    FileUtils.append("papa.txt", "Line one point one.");
+    FileUtils.append("papa.txt", "Line one point two.");
+    FileUtils.append("papa.txt", "Line one point three.");
+    FileUtils.append("papa.txt", "Line two point oh.");
   }
 }
